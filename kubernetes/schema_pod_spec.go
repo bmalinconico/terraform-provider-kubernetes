@@ -555,6 +555,32 @@ func volumeSchema() *schema.Resource {
 		},
 	}
 
+	v["service_account_token"] = &schema.Schema{
+		Type:        schema.TypeList,
+		Description: "Service Account Token",
+		Optional:    true,
+		MaxItems:    1,
+		Elem: &schema.Resource{
+			Schema: map[string]*schema.Schema{
+				"path": {
+					Type:        schema.TypeString,
+					Description: "Path",
+					Required:    true,
+				},
+				"audience": {
+					Type:        schema.TypeString,
+					Description: "Audience",
+					Required:    true,
+				},
+				"expiration_seconds": {
+					Type:        schema.TypeInt,
+					Description: "Expiration Seconds",
+					Required:    true,
+				},
+			},
+		},
+	}
+
 	v["secret"] = &schema.Schema{
 		Type:        schema.TypeList,
 		Description: "Secret represents a secret that should populate this volume. More info: http://kubernetes.io/docs/user-guide/volumes#secrets",

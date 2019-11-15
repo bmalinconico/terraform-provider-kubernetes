@@ -958,6 +958,9 @@ func expandVolumes(volumes []interface{}) ([]v1.Volume, error) {
 		if v, ok := m["azure_disk"].([]interface{}); ok && len(v) > 0 {
 			vl[i].AzureDisk = expandAzureDiskVolumeSource(v)
 		}
+		if v, ok := m["service_account_token"].([]interface{}); ok && len(v) > 0 {
+			vl[i].Projected = expandProjectedVolumeSource(v)
+		}
 		if v, ok := m["photon_persistent_disk"].([]interface{}); ok && len(v) > 0 {
 			vl[i].PhotonPersistentDisk = expandPhotonPersistentDiskVolumeSource(v)
 		}
