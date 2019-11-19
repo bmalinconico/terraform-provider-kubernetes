@@ -488,6 +488,44 @@ func expandAWSElasticBlockStoreVolumeSource(l []interface{}) *v1.AWSElasticBlock
 	return obj
 }
 
+func expandProjectedVolumeSource(l []interface{}) *v1.ProjectedVolumeSource {
+	if len(l) == 0 || l[0] == nil {
+		return &v1.ProjectedVolumeSource{}
+	}
+	in := l[0].(map[string]interface{})
+
+	obj := &v1.ProjectedVolumeSource{
+		Sources: []v1.VolumeProjection{},
+	}
+
+	if v, ok := in["service_account_token"].(map[string]interface{}); ok {
+		volProjection := v1.VolumeProjection{
+			ServiceAccountToken: parseServiceAccountToken(v),
+		}
+		obj.Sources = append(obj.Sources, volProjection)
+	}
+
+	return obj
+}
+
+func parseServiceAccountToken(d map[string]interface{}) *v1.ServiceAccountTokenProjection {
+	obj := &v1.ServiceAccountTokenProjection{}
+
+	if v, ok := d["audience"].(string); ok {
+		obj.Audience = v
+	}
+
+	if v, ok := d["expiration_seconds"].(int64); ok {
+		obj.ExpirationSeconds = &v
+	}
+
+	if v, ok := d["path"].(string); ok {
+		obj.Path = v
+	}
+
+	return obj
+}
+
 func expandAzureDiskVolumeSource(l []interface{}) *v1.AzureDiskVolumeSource {
 	if len(l) == 0 || l[0] == nil {
 		return &v1.AzureDiskVolumeSource{}
