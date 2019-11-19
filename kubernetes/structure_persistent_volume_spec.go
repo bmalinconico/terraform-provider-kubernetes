@@ -494,33 +494,26 @@ func expandProjectedVolumeSource(l []interface{}) *v1.ProjectedVolumeSource {
 	}
 	in := l[0].(map[string]interface{})
 
+	tp := &v1.ServiceAccountTokenProjection{}
+
+	if v, ok := in["audience"].(string); ok {
+		tp.Audience = v
+	}
+
+	if v, ok := in["expiration_seconds"].(int64); ok {
+		tp.ExpirationSeconds = &v
+	}
+
+	if v, ok := in["path"].(string); ok {
+		tp.Path = v
+	}
+
 	obj := &v1.ProjectedVolumeSource{
-		Sources: []v1.VolumeProjection{},
-	}
-
-	if v, ok := in["service_account_token"].(map[string]interface{}); ok {
-		volProjection := v1.VolumeProjection{
-			ServiceAccountToken: parseServiceAccountToken(v),
-		}
-		obj.Sources = append(obj.Sources, volProjection)
-	}
-
-	return obj
-}
-
-func parseServiceAccountToken(d map[string]interface{}) *v1.ServiceAccountTokenProjection {
-	obj := &v1.ServiceAccountTokenProjection{}
-
-	if v, ok := d["audience"].(string); ok {
-		obj.Audience = v
-	}
-
-	if v, ok := d["expiration_seconds"].(int64); ok {
-		obj.ExpirationSeconds = &v
-	}
-
-	if v, ok := d["path"].(string); ok {
-		obj.Path = v
+		Sources: []v1.VolumeProjection{
+			v1.VolumeProjection{
+				ServiceAccountToken: tp,
+			},
+		},
 	}
 
 	return obj
