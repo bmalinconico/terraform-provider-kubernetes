@@ -500,8 +500,9 @@ func expandProjectedVolumeSource(l []interface{}) *v1.ProjectedVolumeSource {
 		tp.Audience = v
 	}
 
-	if v, ok := in["expiration_seconds"].(int64); ok {
-		tp.ExpirationSeconds = &v
+	if v, ok := in["expiration_seconds"].(int); ok {
+		val := int64(v)
+		tp.ExpirationSeconds = &val
 	}
 
 	if v, ok := in["path"].(string); ok {

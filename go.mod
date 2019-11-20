@@ -27,3 +27,5 @@ require (
 	k8s.io/client-go v12.0.0+incompatible
 	k8s.io/kube-aggregator v0.0.0-20191025230902-aa872b06629d
 )
+
+go 1.13
